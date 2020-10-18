@@ -10,16 +10,42 @@
  * ========================================
 */
 #include "project.h"
+#include "GlobalVar.h"
+#include "Interrupt_UART.h"
+#include "stdio.h"
+#include "Time_ISR.h"
+
+#define OFF 0
+
+
+int state;
+int time;
+int flag; 
 
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
-
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-
+     
+    state=0;           //state=IDLE
+    time=0;
+    
+    
+    Timer_Start();
+    PWM_RedGreen_Start();
+    PWM_Blue_Start();
+    UART_Start();
+    UART_isr_StartEx(RGBSetting);
+    Timer_isr_StartEx(TimeOut);
+    
+    PWM_RedGreen_WriteCompare1(OFF);          //
+    PWM_RedGreen_WriteCompare2(OFF);          //
+    PWM_Blue_WriteCompare(OFF);               //RGB LED starts OFF
+    
+    
+    
     for(;;)
     {
-        /* Place your application code here. */
+                      //check state variable
     }
 }
 
